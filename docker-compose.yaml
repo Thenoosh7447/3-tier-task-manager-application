@@ -5,9 +5,11 @@ services:
       image: tma-front
       container_name: tma_fcon
       networks:
-        - twa-nw-b
+        - tma-nw-b
       ports:
         - "3000:3000"
+      depends_on: 
+        - backend
 
 
     backend:
@@ -16,9 +18,11 @@ services:
       image: tma-back
       container_name: tma_bcon
       networks:
-        - twa-nw-b
+        - tma-nw-b
       ports:
         - "5000:5000"
+      depends_on: 
+        -  mongodb
 
 
     nginx:
@@ -26,18 +30,27 @@ services:
       image: tma-nx
       container_name: tma_nxcon
       networks:
-        - twa-nw-b
+        - tma-nw-b
       ports:
         - "80:80"
+      depends_on:
+        - frontend
 
 
     mongodb:
+      image: mongo:8.2
+      container_name: mongodb_con
+      volumes:
+        - tma-data:/data/db
+      networks:
+        - tma-nw-b
+      
 
 
 networks:
   tma-nw-b:
 
 volumes:
-  twa-data:
+  tma-data:
 
 
