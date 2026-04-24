@@ -1,0 +1,43 @@
+services:
+    frontend:
+      build:
+        context: ./frontend
+      image: tma-front
+      container_name: tma_fcon
+      networks:
+        - twa-nw-b
+      ports:
+        - "3000:3000"
+
+
+    backend:
+      build:
+        context: ./backend
+      image: tma-back
+      container_name: tma_bcon
+      networks:
+        - twa-nw-b
+      ports:
+        - "5000:5000"
+
+
+    nginx:
+      build: ./nginx
+      image: tma-nx
+      container_name: tma_nxcon
+      networks:
+        - twa-nw-b
+      ports:
+        - "80:80"
+
+
+    mongodb:
+
+
+networks:
+  tma-nw-b:
+
+volumes:
+  twa-data:
+
+
