@@ -17,12 +17,15 @@ services:
         context: ./backend
       image: tma-back
       container_name: tma_bcon
+      env_file:
+        - .env
       networks:
         - tma-nw-b
       ports:
         - "5000:5000"
       depends_on: 
-        -  mongodb
+        mongodb:
+          condition: service_healthy
 
 
     nginx:
@@ -40,11 +43,17 @@ services:
     mongodb:
       image: mongo:8.2
       container_name: mongodb_con
+      env_file:
+        - .env
       volumes:
         - tma-data:/data/db
       networks:
         - tma-nw-b
-      
+      healthcheck:
+        test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping').ok", "--quiet"]
+        interval: 10s
+        timeout: 5s
+        retries: 5    
 
 
 networks:
